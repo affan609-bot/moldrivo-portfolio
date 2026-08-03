@@ -9,12 +9,27 @@
   const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* ------------------------------------------------------------
-     1. PRELOADER — quick fade, no counter animation
+     1. PRELOADER — quick animated counter, then fade out
      ------------------------------------------------------------ */
   const preloader = document.querySelector(".preloader");
+  const loaderCount = document.querySelector(".preloader-count");
   if (preloader) {
-    setTimeout(() => preloader.classList.add("hidden"), 250);
-    document.body.classList.add("loaded");
+    let progress = 0;
+    const target = 100;
+    const duration = 750;
+    const start = performance.now();
+    const tick = (now) => {
+      const t = Math.min((now - start) / duration, 1);
+      progress = Math.round(target * (1 - Math.pow(1 - t, 3))); // easeOutCubic
+      if (loaderCount) loaderCount.textContent = String(progress).padStart(3, "0");
+      if (t < 1) {
+        requestAnimationFrame(tick);
+      } else {
+        setTimeout(() => preloader.classList.add("hidden"), 180);
+        document.body.classList.add("loaded");
+      }
+    };
+    requestAnimationFrame(tick);
   } else {
     document.body.classList.add("loaded");
   }
@@ -81,8 +96,36 @@
   }
 
   /* ------------------------------------------------------------
-     5. (removed) CUSTOM CURSOR GLOW + DOT — disabled for performance
+     5. CUSTOM CURSOR GLOW + DOT
      ------------------------------------------------------------ */
+  const glow = document.getElementById("cursor-glow");
+  const dot = document.getElementById("cursor-dot");
+  if (glow && dot && window.matchMedia("(hover: hover)").matches && !prefersReduced) {
+    let gx = innerWidth / 2, gy = innerHeight / 2;
+    let dx = gx, dy = gy;
+    let targetX = gx, targetY = gy;
+
+    window.addEventListener("mousemove", (e) => {
+      targetX = e.clientX;
+      targetY = e.clientY;
+    });
+
+    const loop = () => {
+      dx += (targetX - dx) * 0.16;
+      dy += (targetY - dy) * 0.16;
+      gx += (targetX - gx) * 0.38;
+      gy += (targetY - gy) * 0.38;
+      glow.style.transform = `translate(${dx - 240}px, ${dy - 240}px)`;
+      dot.style.transform = `translate(${gx - 4}px, ${gy - 4}px)`;
+      requestAnimationFrame(loop);
+    };
+    loop();
+
+    document.addEventListener("mouseover", (e) => {
+      const interactive = e.target.closest("a, button, .chip, .project-card, .faq-q, .magnetic, input, textarea, select, [data-cursor]");
+      dot.classList.toggle("hovering", !!interactive);
+    });
+  }
 
   /* ------------------------------------------------------------
      6. MOBILE MENU
@@ -165,12 +208,79 @@
   });
 
   /* ------------------------------------------------------------
-     11. (removed) HERO PARTICLES CANVAS — disabled for performance
+     11. HERO PARTICLES CANVAS (lightweight)
      ------------------------------------------------------------ */
+  const canvas = document.getElementById("hero-particles");
+  if (canvas && !prefersReduced) {
+    const ctx = canvas.getContext("2d");
+    let particles = [];
+    const COUNT = 40;
+    const resize = () => {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    };
+    resize();
+    window.addEventListener("resize", resize);
+
+    const spawn = (i) => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 2 + 0.6,
+      vx: (Math.random() - 0.5) * 0.35,
+      vy: (Math.random() - 0.5) * 0.35,
+      hue: i % 3 === 0 ? "167,255,60" : "46,139,255",
+      a: Math.random() * 0.5 + 0.15,
+    });
+
+    particles = Array.from({ length: COUNT }, (_, i) => spawn(i));
+
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach((p) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${p.hue},${p.a})`;
+        ctx.fill();
+      });
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const a = particles[i], b = particles[j];
+          const dist = Math.hypot(a.x - b.x, a.y - b.y);
+          if (dist < 120) {
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.strokeStyle = `rgba(46,139,255,${(1 - dist / 120) * 0.12})`;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(draw);
+    };
+    draw();
+  }
 
   /* ------------------------------------------------------------
-     12. (removed) MAGNETIC BUTTONS — disabled
+     12. MAGNETIC BUTTONS
      ------------------------------------------------------------ */
+  document.querySelectorAll(".magnetic").forEach((el) => {
+    if (prefersReduced) return;
+    const strength = 14;
+    el.addEventListener("mousemove", (e) => {
+      const r = el.getBoundingClientRect();
+      const x = e.clientX - r.left - r.width / 2;
+      const y = e.clientY - r.top - r.height / 2;
+      el.style.transform = `translate(${(x / r.width) * strength}px, ${(y / r.height) * strength}px)`;
+    });
+    el.addEventListener("mouseleave", () => {
+      el.style.transform = "";
+    });
+  });
 
   /* ------------------------------------------------------------
      13. ACTIVE NAV LINK (per page)
@@ -464,10 +574,48 @@
   }, { passive: true });
 
   /* ------------------------------------------------------------
-     19. (removed) CARD 3D TILT — disabled for performance
+     19. CARD 3D TILT ON HOVER (desktop only)
      ------------------------------------------------------------ */
+  if (window.matchMedia("(hover: hover)").matches && !prefersReduced) {
+    document.querySelectorAll(".project-card, .team-card").forEach((card) => {
+      let transitioning = false;
+      card.addEventListener("mousemove", (e) => {
+        const r = card.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        if (!transitioning) {
+          card.style.transition = "transform 0.1s ease-out";
+          transitioning = true;
+        }
+        card.style.transform = `perspective(800px) rotateX(${py * -5}deg) rotateY(${px * 5}deg) translateY(-4px) scale(1.01)`;
+      });
+      card.addEventListener("mouseleave", () => {
+        card.style.transition = "transform 0.5s var(--ease)";
+        card.style.transform = "";
+        transitioning = false;
+      });
+    });
+  }
 
   /* ------------------------------------------------------------
-     20. (removed) HERO PARALLAX — disabled for performance
+     20. HERO PARALLAX ON SCROLL (lightweight)
      ------------------------------------------------------------ */
+  if (!prefersReduced) {
+    const heroBlobs = document.querySelectorAll(".hero-blob");
+    const heroFloat = document.querySelector(".hero-float");
+    let ticking = false;
+    window.addEventListener("scroll", () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const y = window.scrollY;
+          heroBlobs.forEach((b, i) => {
+            b.style.translate = `0 ${y * (0.06 + i * 0.04)}px`;
+          });
+          if (heroFloat) heroFloat.style.translate = `0 ${y * 0.12}px`;
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+  }
 })();
