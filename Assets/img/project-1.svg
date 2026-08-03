@@ -1,0 +1,50 @@
+<svg width="1600" height="1000" viewBox="0 0 1600 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="1600" y2="1000" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0E1B33"/>
+      <stop offset="1" stop-color="#2E8BFF"/>
+    </linearGradient>
+    <linearGradient id="g1b" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#2E8BFF"/>
+      <stop offset="1" stop-color="#A7FF3C"/>
+    </linearGradient>
+    <radialGradient id="g1g" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(480 240) rotate(0) scale(500)">
+      <stop stop-color="#2E8BFF" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#2E8BFF" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="40"/>
+    </filter>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#g1)"/>
+  <circle cx="420" cy="240" r="320" fill="#2E8BFF" opacity="0.5" filter="url(#soft)"/>
+  <circle cx="1250" cy="820" r="380" fill="#A7FF3C" opacity="0.22" filter="url(#soft)"/>
+  <g stroke="#FFFFFF" stroke-opacity="0.06" stroke-width="2">
+    <line x1="0" y1="250" x2="1600" y2="250"/><line x1="0" y1="500" x2="1600" y2="500"/><line x1="0" y1="750" x2="1600" y2="750"/>
+    <line x1="400" y1="0" x2="400" y2="1000"/><line x1="800" y1="0" x2="800" y2="1000"/><line x1="1200" y1="0" x2="1200" y2="1000"/>
+  </g>
+  <!-- Browser window -->
+  <rect x="330" y="230" width="940" height="540" rx="20" fill="#0A0A0A" fill-opacity="0.85"/>
+  <rect x="330" y="230" width="940" height="540" rx="20" stroke="#FFFFFF" stroke-opacity="0.1"/>
+  <rect x="330" y="230" width="940" height="56" rx="20" fill="#FFFFFF" fill-opacity="0.05"/>
+  <rect x="360" y="248" width="14" height="14" rx="7" fill="#FF5F57"/><rect x="386" y="248" width="14" height="14" rx="7" fill="#FEBC2E"/><rect x="412" y="248" width="14" height="14" rx="7" fill="#28C840"/>
+  <rect x="450" y="250" width="460" height="12" rx="6" fill="#FFFFFF" fill-opacity="0.12"/>
+  <!-- Chart bars -->
+  <g>
+    <rect x="400" y="640" width="52" height="70" rx="8" fill="#FFFFFF" fill-opacity="0.14"/>
+    <rect x="478" y="590" width="52" height="120" rx="8" fill="#2E8BFF" fill-opacity="0.8"/>
+    <rect x="556" y="620" width="52" height="90" rx="8" fill="#FFFFFF" fill-opacity="0.18"/>
+    <rect x="634" y="540" width="52" height="170" rx="8" fill="url(#g1b)"/>
+    <rect x="712" y="600" width="52" height="110" rx="8" fill="#FFFFFF" fill-opacity="0.16"/>
+    <rect x="790" y="520" width="52" height="190" rx="8" fill="#2E8BFF" fill-opacity="0.6"/>
+  </g>
+  <text x="400" y="352" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="30" font-weight="700">Nova Commerce</text>
+  <text x="400" y="394" fill="#9CA3AF" font-family="Arial, sans-serif" font-size="19">AI-native ecommerce platform · $12.4M GMV/yr</text>
+  <circle cx="400" cy="442" r="6" fill="#A7FF3C"/><text x="416" y="448" fill="#A7FF3C" font-family="Arial, sans-serif" font-size="18">+248% conversion</text>
+  <!-- Floating card -->
+  <rect x="1060" y="380" width="150" height="120" rx="16" fill="#161B22" stroke="#FFFFFF" stroke-opacity="0.12"/>
+  <rect x="1084" y="402" width="60" height="14" rx="7" fill="#2E8BFF"/>
+  <rect x="1084" y="430" width="92" height="10" rx="5" fill="#FFFFFF" fill-opacity="0.18"/>
+  <rect x="1084" y="452" width="70" height="10" rx="5" fill="#FFFFFF" fill-opacity="0.12"/>
+  <circle cx="1160" cy="462" r="22" fill="#A7FF3C" fill-opacity="0.15"/><path d="M1153 462 l5 5 l9 -10" stroke="#A7FF3C" stroke-width="4" stroke-linecap="round" fill="none"/>
+</svg>

@@ -1,0 +1,14 @@
+<svg width="800" height="1000" viewBox="0 0 800 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="t6" x1="0" y1="0" x2="800" y2="1000" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0D1233"/>
+      <stop offset="1" stop-color="#6366F1"/>
+    </linearGradient>
+    <filter id="st6" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="50"/></filter>
+  </defs>
+  <rect width="800" height="1000" fill="url(#t6)"/>
+  <circle cx="400" cy="430" r="240" fill="#A7FF3C" opacity="0.2" filter="url(#st6)"/>
+  <circle cx="400" cy="430" r="190" fill="#0A0A0A" fill-opacity="0.55" stroke="#FFFFFF" stroke-opacity="0.15" stroke-width="4"/>
+  <text x="400" y="500" text-anchor="middle" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="190" font-weight="800">DK</text>
+  <rect x="330" y="700" width="140" height="8" rx="4" fill="#FFFFFF" fill-opacity="0.25"/>
+</svg>

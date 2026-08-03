@@ -1,0 +1,40 @@
+<svg width="1600" height="1000" viewBox="0 0 1600 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g2" x1="0" y1="0" x2="1600" y2="1000" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0B1A14"/>
+      <stop offset="1" stop-color="#2E8BFF"/>
+    </linearGradient>
+    <linearGradient id="g2b" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#A7FF3C"/>
+      <stop offset="1" stop-color="#2E8BFF"/>
+    </linearGradient>
+    <filter id="soft2" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="45"/>
+    </filter>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#g2)"/>
+  <circle cx="1250" cy="300" r="380" fill="#A7FF3C" opacity="0.2" filter="url(#soft2)"/>
+  <circle cx="350" cy="780" r="360" fill="#2E8BFF" opacity="0.45" filter="url(#soft2)"/>
+  <g stroke="#FFFFFF" stroke-opacity="0.05" stroke-width="2">
+    <line x1="0" y1="250" x2="1600" y2="250"/><line x1="0" y1="500" x2="1600" y2="500"/><line x1="0" y1="750" x2="1600" y2="750"/>
+    <line x1="400" y1="0" x2="400" y2="1000"/><line x1="800" y1="0" x2="800" y2="1000"/><line x1="1200" y1="0" x2="1200" y2="1000"/>
+  </g>
+  <!-- AI brain orb -->
+  <circle cx="560" cy="500" r="200" fill="#A7FF3C" fill-opacity="0.08"/>
+  <circle cx="560" cy="500" r="150" stroke="#A7FF3C" stroke-opacity="0.5" stroke-width="2"/>
+  <circle cx="560" cy="500" r="96" fill="url(#g2b)"/>
+  <text x="560" y="526" text-anchor="middle" fill="#0A0A0A" font-family="Arial, sans-serif" font-size="64" font-weight="800">AI</text>
+  <!-- Nodes -->
+  <g stroke="#A7FF3C" stroke-opacity="0.35">
+    <line x1="560" y1="500" x2="320" y2="320"/><line x1="560" y1="500" x2="860" y2="330"/><line x1="560" y1="500" x2="330" y2="700"/><line x1="560" y1="500" x2="820" y2="690"/>
+  </g>
+  <circle cx="320" cy="320" r="12" fill="#A7FF3C"/><circle cx="860" cy="330" r="12" fill="#2E8BFF"/>
+  <circle cx="330" cy="700" r="12" fill="#A7FF3C"/><circle cx="820" cy="690" r="12" fill="#2E8BFF"/>
+  <rect x="1040" y="360" width="360" height="240" rx="20" fill="#0A0A0A" fill-opacity="0.85" stroke="#FFFFFF" stroke-opacity="0.1"/>
+  <text x="1072" y="416" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="30" font-weight="700">Atlas AI</text>
+  <text x="1072" y="454" fill="#9CA3AF" font-family="Arial, sans-serif" font-size="19">Autonomous sales agent · 62% meeting bookings</text>
+  <rect x="1072" y="488" width="200" height="12" rx="6" fill="#A7FF3C"/>
+  <rect x="1072" y="514" width="150" height="12" rx="6" fill="#2E8BFF"/>
+  <rect x="1072" y="540" width="230" height="12" rx="6" fill="#FFFFFF" fill-opacity="0.15"/>
+  <rect x="1072" y="566" width="180" height="12" rx="6" fill="#FFFFFF" fill-opacity="0.12"/>
+</svg>
