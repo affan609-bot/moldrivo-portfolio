@@ -165,8 +165,8 @@ a:focus-visible, button:focus-visible, .chip:focus-visible, .filter-btn:focus-vi
 .btn {
   position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 10px;
   padding: 15px 30px; border-radius: var(--r-full); font-weight: 600; font-size: 15px;
-  letter-spacing: 0.01em; white-space: nowrap; transition: transform var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease), background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
-  will-change: transform; user-select: none;
+   letter-spacing: 0.01em; white-space: nowrap; transition: background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+   user-select: none;
 }
 .btn:active { transform: scale(0.97) !important; }
 .btn .btn-arrow { transition: transform var(--t-fast) var(--ease); }
@@ -175,19 +175,12 @@ a:focus-visible, button:focus-visible, .chip:focus-visible, .filter-btn:focus-vi
 .btn-primary {
   background: var(--grad-brand); color: #fff; box-shadow: 0 10px 30px rgba(46, 139, 255, 0.35);
 }
-.btn-primary::after {
-  content: ""; position: absolute; inset: 0; border-radius: inherit;
-  background: linear-gradient(120deg, transparent 20%, rgba(255,255,255,0.35) 50%, transparent 80%);
-  transform: translateX(-120%); transition: transform var(--t-slow) var(--ease);
-}
-.btn-primary:hover::after { transform: translateX(120%); }
-.btn-primary:hover { box-shadow: 0 16px 44px rgba(46, 139, 255, 0.5); transform: translateY(-2px); }
 
 .btn-ghost { background: var(--glass); border: 1px solid var(--border-strong); backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur); }
-.btn-ghost:hover { border-color: var(--primary); background: var(--primary-soft); transform: translateY(-2px); }
+.btn-ghost:hover { border-color: var(--primary); background: var(--primary-soft); }
 
 .btn-accent { background: var(--accent); color: #0A0A0A; box-shadow: 0 10px 30px rgba(167, 255, 60, 0.25); }
-.btn-accent:hover { box-shadow: 0 16px 44px rgba(167, 255, 60, 0.4); transform: translateY(-2px); }
+.btn-accent:hover { box-shadow: 0 16px 44px rgba(167, 255, 60, 0.4); }
 
 .btn-sm { padding: 10px 20px; font-size: 13.5px; }
 .btn-lg { padding: 18px 38px; font-size: 16px; }
@@ -226,23 +219,7 @@ a:focus-visible, button:focus-visible, .chip:focus-visible, .filter-btn:focus-vi
 }
 .page-transition.active { transform: scaleY(1); }
 
-/* ------------------------------------------------------------
-   5. CUSTOM CURSOR GLOW
-   ------------------------------------------------------------ */
-.cursor-glow {
-  position: fixed; top: 0; left: 0; width: 480px; height: 480px;
-  border-radius: 50%; pointer-events: none; z-index: 1;
-  background: radial-gradient(circle, rgba(46, 139, 255, 0.08), transparent 65%);
-  transform: translate(-50%, -50%); mix-blend-mode: screen;
-}
-[data-theme="light"] .cursor-glow { mix-blend-mode: multiply; background: radial-gradient(circle, rgba(46,139,255,0.12), transparent 65%); }
-.cursor-dot {
-  position: fixed; top: 0; left: 0; width: 8px; height: 8px; border-radius: 50%;
-  background: var(--primary); pointer-events: none; z-index: 1600;
-  transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, background 0.2s;
-}
-.cursor-dot.hovering { width: 44px; height: 44px; background: transparent; border: 1.5px solid var(--primary); }
-@media (hover: none), (pointer: coarse) { .cursor-glow, .cursor-dot { display: none; } }
+/* Custom cursor glow/dot — removed (blocking clicks on desktop) */
 
 /* ------------------------------------------------------------
    6. NAVBAR
@@ -281,7 +258,7 @@ a:focus-visible, button:focus-visible, .chip:focus-visible, .filter-btn:focus-vi
   -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur);
   transition: border-color var(--t-fast), transform var(--t-fast), background var(--t-fast);
 }
-.icon-btn:hover { border-color: var(--primary); background: var(--primary-soft); transform: translateY(-2px); }
+.icon-btn:hover { border-color: var(--primary); background: var(--primary-soft); }
 .icon-btn svg { width: 18px; height: 18px; }
 
 /* Mobile menu */
@@ -324,7 +301,7 @@ a:focus-visible, button:focus-visible, .chip:focus-visible, .filter-btn:focus-vi
   50% { transform: translate(40px, -30px) scale(1.08); }
   100% { transform: translate(-30px, 30px) scale(0.96); }
 }
-#hero-particles { position: absolute; inset: 0; width: 100%; height: 100%; }
+#hero-particles { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 
 .hero-inner { position: relative; z-index: 3; text-align: center; }
 .hero-badge {
@@ -811,13 +788,7 @@ a:focus-visible, button:focus-visible, .chip:focus-visible, .filter-btn:focus-vi
    23. PREMIUM POLISH & MICRO-INTERACTIONS
    ============================================================ */
 
-/* Film grain overlay for ultra-realistic texture */
-.grain {
-  position: fixed; inset: -50%; z-index: 1700; pointer-events: none;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-  background-size: 180px; opacity: 0.035; mix-blend-mode: overlay;
-}
-[data-theme="light"] .grain { opacity: 0.05; filter: invert(1); }
+/* Film grain overlay — removed (was blocking clicks on desktop) */
 
 /* Team avatar (for members without photo assets) */
 .team-photo { display: grid; place-items: center; }
@@ -854,10 +825,7 @@ body.loaded .hero-title .h-word.grad-text {
 }
 [data-theme="light"] .hero::after { background: radial-gradient(120% 90% at 50% 30%, transparent 50%, rgba(0,0,0,0.06) 100%); }
 
-/* Button letter-spacing expand + shine */
-.btn:hover { letter-spacing: 0.04em; }
-
-/* Glass card sheen sweep */
+/* Button hover animations removed — was interfering with nav clicks */
 .glass-card::after {
   content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
   background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.06) 45%, transparent 60%);
@@ -913,4 +881,16 @@ html { scroll-behavior: smooth; }
   .team-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
   #moldrivo-fab { right: 16px; bottom: 16px; width: 56px; height: 56px; }
   #moldrivo-chat-window { right: 8px; bottom: 8px; width: calc(100vw - 16px); height: calc(100vh - 60px); }
+}
+@media (max-width: 360px) {
+  :root { --nav-h: 60px; }
+  .icon-btn { width: 38px; height: 38px; }
+  .icon-btn svg { width: 16px; height: 16px; }
+  .hero-title { font-size: clamp(36px, 10vw, 64px); }
+  .hero-sub { font-size: clamp(14px, 3.5vw, 17px); }
+  .btn { padding: 12px 20px; font-size: 14px; }
+  .section-title { font-size: clamp(28px, 8vw, 40px); }
+  .card { padding: 20px; }
+  .project-modal { padding: 12px; }
+  .modal-close { top: 12px; right: 12px; width: 36px; height: 36px; }
 }
