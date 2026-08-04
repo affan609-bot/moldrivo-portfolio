@@ -8,7 +8,7 @@ const CONFIG = {
     // URLs for actions
     URLS: {
         booking: "https://calendly.com/moldrivo",
-        whatsapp: "https://wa.me/1234567890",
+        whatsapp: "https://wa.me/923199376696",
         email: "mailto:hello@moldrivo.com"
     }
 };
