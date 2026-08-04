@@ -8,8 +8,45 @@
 
   const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  const safe = (fn) => { try { fn(); } catch (e) { console.warn("site.js block skipped:", e.message); } };
   /* ------------------------------------------------------------
-     1. PRELOADER — quick animated counter, then fade out
+     1. THEME TOGGLE (runs first — critical UI)
+     ------------------------------------------------------------ */
+  safe(() => {
+    const html = document.documentElement;
+    const themeBtn = document.getElementById("theme-toggle-site");
+    const savedTheme = localStorage.getItem("moldrivo_theme");
+    if (savedTheme) html.setAttribute("data-theme", savedTheme);
+
+    const syncThemeIcons = () => {
+      const isDark = html.getAttribute("data-theme") !== "light";
+      document.querySelectorAll("[data-theme-icon]").forEach((icon) => {
+        icon.style.display = isDark ? "" : "none";
+      });
+      document.querySelectorAll("[data-theme-icon-light]").forEach((icon) => {
+        icon.style.display = isDark ? "none" : "";
+      });
+    };
+    syncThemeIcons();
+
+    const themeObserver = new MutationObserver(() => {
+      syncThemeIcons();
+      localStorage.setItem("moldrivo_theme", html.getAttribute("data-theme") === "light" ? "light" : "dark");
+    });
+    themeObserver.observe(html, { attributes: true, attributeFilter: ["data-theme"] });
+
+    if (themeBtn) {
+      themeBtn.addEventListener("click", () => {
+        const next = html.getAttribute("data-theme") === "light" ? "dark" : "light";
+        html.setAttribute("data-theme", next);
+        localStorage.setItem("moldrivo_theme", next);
+        syncThemeIcons();
+      });
+    }
+  });
+
+  /* ------------------------------------------------------------
+     2. PRELOADER — quick animated counter, then fade out
      ------------------------------------------------------------ */
   const preloader = document.querySelector(".preloader");
   const loaderCount = document.querySelector(".preloader-count");
@@ -32,41 +69,6 @@
     requestAnimationFrame(tick);
   } else {
     document.body.classList.add("loaded");
-  }
-
-  /* ------------------------------------------------------------
-     2. THEME TOGGLE (site nav) — dark / light
-     ------------------------------------------------------------ */
-  const html = document.documentElement;
-  const themeBtn = document.getElementById("theme-toggle-site");
-  const savedTheme = localStorage.getItem("moldrivo_theme");
-  if (savedTheme) html.setAttribute("data-theme", savedTheme);
-
-  const syncThemeIcons = () => {
-    const isDark = html.getAttribute("data-theme") !== "light";
-    document.querySelectorAll("[data-theme-icon]").forEach((icon) => {
-      icon.style.display = isDark ? "" : "none";
-    });
-    document.querySelectorAll("[data-theme-icon-light]").forEach((icon) => {
-      icon.style.display = isDark ? "none" : "";
-    });
-  };
-  syncThemeIcons();
-
-  // Keep icons + storage in sync when the CHATBOT's own theme toggle flips the attribute
-  const themeObserver = new MutationObserver(() => {
-    syncThemeIcons();
-    localStorage.setItem("moldrivo_theme", html.getAttribute("data-theme") === "light" ? "light" : "dark");
-  });
-  themeObserver.observe(html, { attributes: true, attributeFilter: ["data-theme"] });
-
-  if (themeBtn) {
-    themeBtn.addEventListener("click", () => {
-      const next = html.getAttribute("data-theme") === "light" ? "dark" : "light";
-      html.setAttribute("data-theme", next);
-      localStorage.setItem("moldrivo_theme", next);
-      syncThemeIcons();
-    });
   }
 
   /* ------------------------------------------------------------
