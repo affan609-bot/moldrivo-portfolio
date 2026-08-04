@@ -194,6 +194,13 @@ a:focus-visible, button:focus-visible, .chip:focus-visible, .filter-btn:focus-vi
 .btn-lg { padding: 18px 38px; font-size: 16px; }
 .btn-block { width: 100%; }
 
+/* Navbar "Get Started" button — no hover animation (clean/stable) */
+.nav-actions .btn:hover { letter-spacing: 0.01em; }
+.nav-actions .btn-primary::after { opacity: 0; }
+.nav-actions .btn-primary:hover::after { transform: none; opacity: 0; }
+.nav-actions .btn-primary:hover { transform: none; box-shadow: 0 10px 30px rgba(46, 139, 255, 0.35); }
+.nav-actions .btn:hover .btn-arrow { transform: none; }
+
 /* ------------------------------------------------------------
    3. PRELOADER
    ------------------------------------------------------------ */
