@@ -70,33 +70,7 @@
   }
 
   /* ------------------------------------------------------------
-     3. NAVBAR — scrolled glass state
-     ------------------------------------------------------------ */
-  const navbar = document.getElementById("navbar");
-  const onScrollNav = () => {
-    if (!navbar) return;
-    navbar.classList.toggle("scrolled", window.scrollY > 24);
-  };
-  onScrollNav();
-  window.addEventListener("scroll", onScrollNav, { passive: true });
-
-  /* ------------------------------------------------------------
-     4. SCROLL PROGRESS BAR
-     ------------------------------------------------------------ */
-  const progressBar = document.getElementById("progress-bar");
-  if (progressBar) {
-    const onProgress = () => {
-      const h = document.documentElement;
-      const max = h.scrollHeight - h.clientHeight;
-      progressBar.style.width = `${max > 0 ? (h.scrollTop / max) * 100 : 0}%`;
-    };
-    onProgress();
-    window.addEventListener("scroll", onProgress, { passive: true });
-    window.addEventListener("resize", onProgress);
-  }
-
-  /* ------------------------------------------------------------
-     5. CUSTOM CURSOR GLOW + DOT
+     3. CUSTOM CURSOR GLOW + DOT
      ------------------------------------------------------------ */
   const glow = document.getElementById("cursor-glow");
   const dot = document.getElementById("cursor-dot");
@@ -111,9 +85,9 @@
     });
 
     const loop = () => {
-      dx += (targetX - dx) * 0.16;
+      dx += (targetX - dx) * 0.16; // glow eases slower
       dy += (targetY - dy) * 0.16;
-      gx += (targetX - gx) * 0.38;
+      gx += (targetX - gx) * 0.38; // dot faster
       gy += (targetY - gy) * 0.38;
       glow.style.transform = `translate(${dx - 240}px, ${dy - 240}px)`;
       dot.style.transform = `translate(${gx - 4}px, ${gy - 4}px)`;
@@ -128,7 +102,53 @@
   }
 
   /* ------------------------------------------------------------
-     6. MOBILE MENU
+     4. NAVBAR — scrolled glass state + hide on scroll down
+     ------------------------------------------------------------ */
+  const navbar = document.getElementById("navbar");
+  const onScrollNav = () => {
+    if (!navbar) return;
+    navbar.classList.toggle("scrolled", window.scrollY > 24);
+  };
+  onScrollNav();
+  window.addEventListener("scroll", onScrollNav, { passive: true });
+
+  /* ------------------------------------------------------------
+     5. SCROLL PROGRESS BAR
+     ------------------------------------------------------------ */
+  const progressBar = document.getElementById("progress-bar");
+  if (progressBar) {
+    const onProgress = () => {
+      const h = document.documentElement;
+      const max = h.scrollHeight - h.clientHeight;
+      progressBar.style.width = `${max > 0 ? (h.scrollTop / max) * 100 : 0}%`;
+    };
+    onProgress();
+    window.addEventListener("scroll", onProgress, { passive: true });
+    window.addEventListener("resize", onProgress);
+  }
+
+  /* ------------------------------------------------------------
+     6. PAGE TRANSITIONS — fade-out on internal navigation
+     ------------------------------------------------------------ */
+  const transitionEl = document.getElementById("page-transition");
+  document.addEventListener("click", (e) => {
+    const link = e.target.closest("a[href]");
+    if (!link) return;
+    const href = link.getAttribute("href");
+    if (!href || href.startsWith("#") || href.startsWith("mailto:") || href.startsWith("tel:") ||
+        href.startsWith("http") || href.startsWith("https") || href.startsWith("javascript:") ||
+        link.target === "_blank" || link.hasAttribute("download")) return;
+    e.preventDefault();
+    if (transitionEl) {
+      transitionEl.classList.add("active");
+      setTimeout(() => { window.location.href = href; }, 480);
+    } else {
+      window.location.href = href;
+    }
+  });
+
+  /* ------------------------------------------------------------
+     7. MOBILE MENU
      ------------------------------------------------------------ */
   const menuToggle = document.getElementById("menu-toggle");
   const mobileMenu = document.getElementById("mobile-menu");
@@ -142,10 +162,6 @@
   };
   if (menuToggle) menuToggle.addEventListener("click", () => toggleMenu());
   if (mobileMenu) mobileMenu.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => toggleMenu(false)));
-
-  /* ------------------------------------------------------------
-     7. (removed) PAGE TRANSITIONS — normal navigation, no delay
-     ------------------------------------------------------------ */
 
   /* ------------------------------------------------------------
      8. SCROLL REVEAL (IntersectionObserver)
@@ -443,7 +459,6 @@
       const item = q.closest(".faq-item");
       const answer = item.querySelector(".faq-a");
       const isOpen = item.classList.contains("open");
-      // close siblings
       item.parentElement.querySelectorAll(".faq-item.open").forEach((other) => {
         if (other !== item) {
           other.classList.remove("open");
@@ -574,31 +589,7 @@
   }, { passive: true });
 
   /* ------------------------------------------------------------
-     19. CARD 3D TILT ON HOVER (desktop only)
-     ------------------------------------------------------------ */
-  if (window.matchMedia("(hover: hover)").matches && !prefersReduced) {
-    document.querySelectorAll(".project-card, .team-card").forEach((card) => {
-      let transitioning = false;
-      card.addEventListener("mousemove", (e) => {
-        const r = card.getBoundingClientRect();
-        const px = (e.clientX - r.left) / r.width - 0.5;
-        const py = (e.clientY - r.top) / r.height - 0.5;
-        if (!transitioning) {
-          card.style.transition = "transform 0.1s ease-out";
-          transitioning = true;
-        }
-        card.style.transform = `perspective(800px) rotateX(${py * -5}deg) rotateY(${px * 5}deg) translateY(-4px) scale(1.01)`;
-      });
-      card.addEventListener("mouseleave", () => {
-        card.style.transition = "transform 0.5s var(--ease)";
-        card.style.transform = "";
-        transitioning = false;
-      });
-    });
-  }
-
-  /* ------------------------------------------------------------
-     20. HERO PARALLAX ON SCROLL (lightweight)
+     19. HERO PARALLAX ON SCROLL (lightweight)
      ------------------------------------------------------------ */
   if (!prefersReduced) {
     const heroBlobs = document.querySelectorAll(".hero-blob");
