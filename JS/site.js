@@ -15,78 +15,54 @@
   safe(() => {
     const html = document.documentElement;
     const themeBtn = document.getElementById("theme-toggle-site");
+    const themeDropdown = document.querySelector(".theme-dropdown");
+
+    // Apply saved theme on load
     const savedTheme = localStorage.getItem("moldrivo_theme");
     if (savedTheme) html.setAttribute("data-theme", savedTheme);
 
-    const syncThemeIcons = () => {
+    const syncIcons = () => {
       const isDark = html.getAttribute("data-theme") !== "light";
-      document.querySelectorAll("[data-theme-icon]").forEach((icon) => {
-        icon.style.display = isDark ? "" : "none";
-      });
-      document.querySelectorAll("[data-theme-icon-light]").forEach((icon) => {
-        icon.style.display = isDark ? "none" : "";
-      });
+      document.querySelectorAll("[data-theme-icon]").forEach((i) => { i.style.display = isDark ? "" : "none"; });
+      document.querySelectorAll("[data-theme-icon-light]").forEach((i) => { i.style.display = isDark ? "none" : ""; });
     };
-    syncThemeIcons();
+    syncIcons();
 
-    // Build dropdown menu (once)
-    let themeMenu = null;
-    const buildMenu = () => {
-      if (themeMenu) return themeMenu;
-      const menu = document.createElement("div");
-      menu.className = "theme-menu";
-      menu.setAttribute("role", "menu");
-      menu.innerHTML = `
-        <button class="theme-option" data-theme-val="dark">🌙 Dark</button>
-        <button class="theme-option" data-theme-val="light">☀️ Light</button>
-        <button class="theme-option" data-theme-val="system">⚙️ System default</button>
-      `;
-      // click option → apply
-      menu.querySelectorAll(".theme-option").forEach((opt) => {
+    const toggleDropdown = () => {
+      themeDropdown.classList.toggle("open");
+    };
+    const closeDropdown = () => {
+      themeDropdown.classList.remove("open");
+    };
+    const applyTheme = (val) => {
+      if (val === "system") {
+        localStorage.removeItem("moldrivo_theme");
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        html.setAttribute("data-theme", prefersDark ? "dark" : "light");
+      } else {
+        html.setAttribute("data-theme", val);
+        localStorage.setItem("moldrivo_theme", val);
+      }
+      syncIcons();
+      closeDropdown();
+    };
+
+    if (themeBtn && themeDropdown) {
+      themeBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        toggleDropdown();
+      });
+      themeDropdown.querySelectorAll("[data-theme-val]").forEach((opt) => {
         opt.addEventListener("click", (e) => {
           e.stopPropagation();
           const val = opt.getAttribute("data-theme-val");
-          if (val === "system") {
-            localStorage.removeItem("moldrivo_theme");
-            const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-            html.setAttribute("data-theme", prefersDark ? "dark" : "light");
-          } else {
-            html.setAttribute("data-theme", val);
-            localStorage.setItem("moldrivo_theme", val);
-          }
-          syncThemeIcons();
-          closeMenu();
+          applyTheme(val);
         });
-      });
-      themeBtn.parentNode.appendChild(menu);
-      return menu;
-    };
-    const openMenu = () => {
-      themeMenu = buildMenu();
-      const r = themeBtn.getBoundingClientRect();
-      themeMenu.style.top = (r.bottom + window.scrollY) + "px";
-      themeMenu.style.left = (r.left + window.scrollX) + "px";
-      setTimeout(() => themeMenu.classList.add("open"), 10);
-    };
-    const closeMenu = () => {
-      if (themeMenu) themeMenu.classList.remove("open");
-    };
-    const toggleMenu = () => {
-      if (themeMenu && themeMenu.classList.contains("open")) closeMenu();
-      else openMenu();
-    };
-
-    if (themeBtn) {
-      themeBtn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        toggleMenu();
       });
     }
 
-    // close menu on outside click / escape
-    const closeHandler = () => { if (themeMenu && themeMenu.classList.contains("open")) closeMenu(); };
-    document.addEventListener("click", closeHandler);
-    document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeMenu(); });
+    document.addEventListener("click", () => closeDropdown());
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeDropdown(); });
   });
 
   /* ------------------------------------------------------------

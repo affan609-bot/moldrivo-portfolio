@@ -253,22 +253,9 @@ a:focus-visible, button:focus-visible, .chip:focus-visible, .filter-btn:focus-vi
 @media (hover: none), (pointer: coarse) { .cursor-glow, .cursor-dot { display: none; } }
 
 /* Theme selector dropdown */
-.theme-menu {
-  position: absolute; top: 100%; right: 0; z-index: 1300;
-  min-width: 170px; display: flex; flex-direction: column; gap: 4px;
-  padding: 6px; border-radius: var(--r-md);
-  background: var(--bg-2); border: 1px solid var(--border);
-  box-shadow: var(--shadow-lg); opacity: 0; visibility: hidden;
-  transform: translateY(-6px); transition: opacity 0.18s var(--ease), visibility 0.18s, transform 0.18s var(--ease);
-  backdrop-filter: var(--blur);
-}
-.theme-menu.open { opacity: 1; visibility: visible; transform: translateY(0); }
-.theme-option {
-  display: block; width: 100%; text-align: left; padding: 9px 12px; border-radius: var(--r-sm);
-  font-size: 13.5px; color: var(--text); background: transparent;
-  border: 1px solid transparent; transition: background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
-  cursor: pointer;
-}
+.theme-dropdown { position: absolute; top: 100%; right: 0; z-index: 1300; min-width: 170px; display: flex; flex-direction: column; gap: 4px; padding: 6px; border-radius: var(--r-md); background: var(--bg-2); border: 1px solid var(--border); box-shadow: var(--shadow-lg); opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity 0.18s var(--ease), visibility 0.18s, transform 0.18s var(--ease); backdrop-filter: var(--blur); pointer-events: none; }
+.theme-dropdown.open { opacity: 1; visibility: visible; transform: translateY(0); pointer-events: auto; }
+.theme-option { display: block; width: 100%; text-align: left; padding: 9px 12px; border-radius: var(--r-sm); font-size: 13.5px; color: var(--text); background: transparent; border: 1px solid transparent; transition: background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease), transform var(--t-fast) var(--ease); cursor: pointer; }
 .theme-option:hover { background: var(--primary-soft); border-color: var(--primary); transform: translateX(4px); }
 
 /* ------------------------------------------------------------
